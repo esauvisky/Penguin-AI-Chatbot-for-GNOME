@@ -490,7 +490,6 @@ export default class PenguinExtension extends Extension {
     }
     disable() {
         this._penguin.destroy();
-        this._unbindShortcut();
         this._penguin = null;
     }
 }
