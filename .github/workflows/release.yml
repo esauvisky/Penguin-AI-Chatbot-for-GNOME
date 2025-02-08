@@ -12,34 +12,38 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Cache npm dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y gnome-shell gnome-shell-extensions
+        npm ci
 
     - name: Build extension
       run: |
-        npm install
+        set -e
         npm run build
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+    - name: Verify Build Output
+      run: |
+        if [ ! -f penguin-ai-chatbot@coffeecionado.gitlab.io.shell-extension.zip ]; then
+          echo "Build failed! Extension ZIP file missing."
+          exit 1
+        fi
 
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
+    - name: Create GitHub Release
+      run: |
+        set -e
+        gh release create ${{ github.ref }} \
+          ./penguin-ai-chatbot@coffeecionado.gitlab.io.shell-extension.zip \
+          --title "Release ${{ github.ref }}" \
+          --notes "Auto-generated release"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./penguin-ai-chatbot@coffeecionado.gitlab.io.shell-extension.zip
-        asset_name: penguin-ai-chatbot@coffeecionado.gitlab.io.shell-extension.zip
-        asset_content_type: application/zip
