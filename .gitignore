@@ -1,1 +1,7 @@
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea
+node_modules/
+__pycache__/
 penguin-ai-chatbot@coffeecionado.gitlab.io.shell-extension.zip
