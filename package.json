@@ -1,0 +1,25 @@
+{
+  "name": "penguin-ai-chatbot",
+  "version": "1.0.0",
+  "description": "A GNOME Shell extension that provides a chatbot interface using various LLM providers.",
+  "main": "extension.js",
+  "scripts": {
+     "build": "rm -f penguin-ai-chatbot@coffeecionado.gitlab.io.shell-extension.zip; glib-compile-schemas schemas/; gnome-extensions pack --force --extra-source=schemas/ --extra-source=public/ --extra-source=assets/ --extra-source=md2pango.js --extra-source=stylesheet.css --extra-source=prefs.js",
+     "install": "gnome-extensions install penguin-ai-chatbot@coffeecionado.gitlab.io.shell-extension.zip --force",
+     "enable": "dbus-run-session -- gnome-extensions enable penguin-ai-chatbot@coffeecionado.gitlab.io",
+     "run": "dbus-run-session -- gnome-shell --nested --wayland",
+     "clean": "rm -f penguin-ai-chatbot@coffeecionado.gitlab.io.shell-extension.zip; rm -f schemas/gschemas.compiled"
+   },
+  "keywords": [
+    "gnome",
+    "shell",
+    "extension",
+    "chatbot",
+    "llm",
+    "ai"
+  ],
+  "author": "coffeecionado",
+  "license": "ISC",
+  "devDependencies": {
+  }
+}
