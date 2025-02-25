@@ -10,5 +10,9 @@
   ],
   "url": "https://martijara.github.io/Penguin-AI-Chatbot-for-GNOME/",
   "uuid": "penguin-ai-chatbot@coffeecionado.gitlab.io",
+<<<<<<< HEAD
   "version": 16
+=======
+  "version": 18
+>>>>>>> d89e358 (Version 18 [build])
 }

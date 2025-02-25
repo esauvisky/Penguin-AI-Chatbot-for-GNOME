@@ -1,6 +1,6 @@
 {
   "name": "penguin-ai-chatbot",
-  "version": "1.0.0",
+  "version": "1.8.0",
   "description": "A GNOME Shell extension that provides a chatbot interface using various LLM providers.",
   "type": "module",
   "main": "extension.js",
