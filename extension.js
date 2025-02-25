@@ -91,6 +91,7 @@ class Penguin extends PanelMenu.Button
         this._httpSession = new Soup.Session();
         this.timeoutCopy = null
         this.timeoutResponse = null
+        this.timeoutFocusInputBox = null;
 
 
         // --- EXTENSION FOOTER
@@ -132,7 +133,11 @@ class Penguin extends PanelMenu.Button
                 icon_name: 'tab-new-symbolic',
                 style: 'width: 30px; height:30px'})
         });
-
+        this.menu.connect('open-state-changed', (self, open) => {
+            if (open) {
+                this._focusInputBox();
+            }
+        });
         this.newConversation.connect('clicked', (actor) => {
             if (this.chatInput.get_text() == "Create a new conversation (Deletes current)" ||  this.chatInput.get_text() != "I am Thinking...") {
                 this.history = []
@@ -234,11 +239,23 @@ class Penguin extends PanelMenu.Button
         Main.wm.removeKeybinding('open-chat-shortcut');
     }
 
+    _focusInputBox() {
+        if (!this.timeoutFocusInputBox) {
+            console.log("lol");
+            this.timeoutFocusInputBox = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 50, () => {
+                this.chatInput.grab_key_focus();
+                this.timeoutFocusInputBox = null;
+                return GLib.SOURCE_REMOVE;
+            });
+        }
+    }
+
     _toggleChatWindow() {
         if (this.menu.isOpen) {
             this.menu.close();
         } else {
             this.menu.open();
+            this._focusInputBox();
         }
     }
 
@@ -256,6 +273,7 @@ class Penguin extends PanelMenu.Button
 
         this.chatInput.set_reactive(true)
         this.chatInput.set_text("")
+        this._focusInputBox();
 
         return;
     }
@@ -439,6 +457,7 @@ class Penguin extends PanelMenu.Button
 
                 this.chatInput.set_reactive(true);
                 this.chatInput.set_text("");
+                this._focusInputBox();
             }
         );
 
